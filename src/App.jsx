@@ -6,6 +6,7 @@ import ResultsPage from './pages/ResultsPage'
 import ResultsGuidePage from './pages/ResultsGuidePage'
 import ClubDetailPage from './pages/ClubDetailPage'
 import MyClubsPage from './pages/MyClubsPage'
+import RecruiterPage from './pages/RecruiterPage'
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
       <Route path="/results-guide" element={<ResultsGuidePage />} />
       <Route path="/clubs/:id" element={<ClubDetailPage />} />
       <Route path="/my-clubs" element={<MyClubsPage />} />
+      <Route path="/recruiter" element={<RecruiterPage />} />
     </Routes>
   )
 }

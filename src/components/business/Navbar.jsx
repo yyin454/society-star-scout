@@ -5,7 +5,8 @@ const navItems = [
   { label: '社团广场', to: '/clubs' },
   { label: '智能匹配', to: '/quiz' },
   { label: '推荐结果', to: '/results' },
-  { label: '我的社团', to: '/my-clubs' }
+  { label: '我的社团', to: '/my-clubs' },
+  { label: '社团端', to: '/recruiter' }
 ]
 
 function Navbar() {
@@ -49,7 +50,7 @@ function Navbar() {
           </button>
           <button
             type="button"
-            className="btn-primary"
+            className="inline-flex items-center justify-center rounded-2xl bg-brand-500 px-5 py-3 text-sm font-semibold text-white transition hover:bg-brand-600"
           >
             注册
           </button>

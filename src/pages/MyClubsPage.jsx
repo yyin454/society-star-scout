@@ -12,8 +12,10 @@ import {
   reminders
 } from '../data/clubs'
 import { getFavorites } from '../utils/storage'
+import { getRecruiterState } from '../utils/recruiterStorage'
 
 function MyClubsPage() {
+  const recruiterState = getRecruiterState()
   const localFavorites = getFavorites()
   const mergedFavorites = [...new Set([...mockFavorites, ...localFavorites])]
 
@@ -22,17 +24,28 @@ function MyClubsPage() {
     [mergedFavorites]
   )
 
-  const appliedClubs = useMemo(
-    () =>
-      mockApplications.map((application) => {
-        const club = clubs.find((item) => item.id === application.clubId)
+  const appliedClubs = useMemo(() => {
+    const recruiterClubName = recruiterState.clubInfo.name
+    const hasInterviewNotice = Boolean(recruiterState.interviewNotice.sentAt)
+
+    return mockApplications.map((application) => {
+      const club = clubs.find((item) => item.id === application.clubId)
+
+      if (club?.name === recruiterClubName && hasInterviewNotice) {
         return {
           ...application,
-          club
+          club,
+          status: '待面试',
+          note: `已通过初筛，请留意后续面试通知。`
         }
-      }),
-    []
-  )
+      }
+
+      return {
+        ...application,
+        club
+      }
+    })
+  }, [recruiterState])
 
   return (
     <div className="page-shell">
@@ -70,7 +83,25 @@ function MyClubsPage() {
                           </div>
                           <div className="text-sm text-ink-500">更新时间：{item.updateTime}</div>
                         </div>
+
                         <p className="mt-4 text-sm leading-7 text-ink-600">{item.note}</p>
+
+                        {item.status === '待面试' ? (
+                          <div className="mt-4 grid gap-3 md:grid-cols-2">
+                            <div className="rounded-2xl border border-ink-100 bg-ink-50 px-4 py-3 text-sm text-ink-600">
+                              面试时间：{recruiterState.interviewNotice.time}
+                            </div>
+                            <div className="rounded-2xl border border-ink-100 bg-ink-50 px-4 py-3 text-sm text-ink-600">
+                              面试地点：{recruiterState.interviewNotice.location}
+                            </div>
+                            <div className="rounded-2xl border border-ink-100 bg-ink-50 px-4 py-3 text-sm text-ink-600">
+                              通知方式：{recruiterState.interviewNotice.method}
+                            </div>
+                            <div className="rounded-2xl border border-ink-100 bg-ink-50 px-4 py-3 text-sm text-ink-600">
+                              备注说明：{recruiterState.interviewNotice.note}
+                            </div>
+                          </div>
+                        ) : null}
                       </div>
                     ))}
                   </div>
